@@ -1,53 +1,40 @@
+function Insertion() {
+    // Setting Time Complexities
+    document.getElementById("Time_Worst").innerText = "O(N^2)";
+    document.getElementById("Time_Average").innerText = "Θ(N^2)";
+    document.getElementById("Time_Best").innerText = "Ω(N)";
 
+    // Setting Space Complexity
+    document.getElementById("Space_Worst").innerText = "O(1)";
 
-function Insertion()
-{
-    //Setting Time complexities
-    document.getElementById("Time_Worst").innerText="O(N^2)";
-    document.getElementById("Time_Average").innerText="Θ(N^2)";
-    document.getElementById("Time_Best").innerText="Ω(N)";
+    c_delay = 0;
 
-    //Setting Space complexity
-    document.getElementById("Space_Worst").innerText="O(1)";
+    for (let i = 0; i < array_size; i++) {
+        div_update(divs[i], div_sizes[i], "yellow"); // Highlight current element
 
-    c_delay=0;
+        let j = i;
+        let key = div_sizes[j];
 
-    for(var j=0;j<array_size;j++)
-    {
-        div_update(divs[j],div_sizes[j],"yellow");//Color update
+        while (j > 0 && div_sizes[j - 1] > key) {
+            div_update(divs[j - 1], div_sizes[j - 1], "red"); // Highlight elements being compared
+            div_update(divs[j], div_sizes[j], "red");
 
-        var key= div_sizes[j];
-        var i=j-1;
-        while(i>=0 && div_sizes[i]>key)
-        {
-            div_update(divs[i],div_sizes[i],"red");//Color update
-            div_update(divs[i+1],div_sizes[i+1],"red");//Color update
+            // Swap
+            div_sizes[j] = div_sizes[j - 1];
+            div_update(divs[j], div_sizes[j], "red"); // Height update after swap
 
-            div_sizes[i+1]=div_sizes[i];
-
-            div_update(divs[i],div_sizes[i],"red");//Height update
-            div_update(divs[i+1],div_sizes[i+1],"red");//Height update
-    
-            div_update(divs[i],div_sizes[i],"blue");//Color update
-            if(i==(j-1))
-            {
-                div_update(divs[i+1],div_sizes[i+1],"yellow");//Color update
-            }
-            else
-            {
-                div_update(divs[i+1],div_sizes[i+1],"blue");//Color update
-            }
-            i-=1;
+            div_update(divs[j - 1], div_sizes[j - 1], "blue"); // Restore previous element color
+            j--;
         }
-        div_sizes[i+1]=key;
 
-        for(var t=0;t<j;t++)
-        {
-            div_update(divs[t],div_sizes[t],"green");//Color update
+        div_sizes[j] = key;
+        div_update(divs[j], div_sizes[j], "red"); // Height update after placing element
+
+        // Mark sorted elements in green
+        for (let t = 0; t <= i; t++) {
+            div_update(divs[t], div_sizes[t], "green");
         }
     }
-    div_update(divs[j-1],div_sizes[j-1],"green");//Color update
 
     enable_buttons();
 }
-

@@ -74,7 +74,7 @@ function runalgo()
     {
         case "Bubble":Bubble();
                         break;
-        case "Selection":Selection_sort();
+        case "Selection":Selection();
                         break;
         case "Insertion":Insertion();
                         break;

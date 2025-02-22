@@ -1,70 +1,65 @@
+function Merge() {
+    // Setting Time complexities
+    document.getElementById("Time_Worst").innerText = "O(N log N)";
+    document.getElementById("Time_Average").innerText = "Θ(N log N)";
+    document.getElementById("Time_Best").innerText = "Ω(N log N)";
 
+    // Setting Space complexity
+    document.getElementById("Space_Worst").innerText = "O(N)"; // Temporary array usage
 
-function Merge()
-{
-    //Setting Time complexities
-    document.getElementById("Time_Worst").innerText="O(N log N)";
-    document.getElementById("Time_Average").innerText="Θ(N log N)";
-    document.getElementById("Time_Best").innerText="Ω(N log N)";
+    c_delay = 0;
 
-    //Setting Space complexity
-    document.getElementById("Space_Worst").innerText="O(N)";
-
-    c_delay=0;
-
-    merge_partition(0,array_size-1);
+    mergeSortHelper(0, array_size - 1);
 
     enable_buttons();
 }
 
-function merge_sort(start,mid,end)
-{
-    var p=start,q=mid+1;
+function mergeSortHelper(low, high) {
+    if (low >= high) return;
 
-    var Arr=[],k=0;
+    let mid = Math.floor((low + high) / 2);
+    div_update(divs[mid], div_sizes[mid], "yellow"); // Highlight midpoint
 
-    for(var i=start; i<=end; i++)
-    {
-        if(p>mid)
-        {
-            Arr[k++]=div_sizes[q++];
-            div_update(divs[q-1],div_sizes[q-1],"red");//Color update
-        }
-        else if(q>end)
-        {
-            Arr[k++]=div_sizes[p++];
-            div_update(divs[p-1],div_sizes[p-1],"red");//Color update
-        }
-        else if(div_sizes[p]<div_sizes[q])
-        {
-            Arr[k++]=div_sizes[p++];
-            div_update(divs[p-1],div_sizes[p-1],"red");//Color update
-        }
-        else
-        {
-            Arr[k++]=div_sizes[q++];
-            div_update(divs[q-1],div_sizes[q-1],"red");//Color update
-        }
-    }
-
-    for(var t=0;t<k;t++)
-    {
-        div_sizes[start++]=Arr[t];
-        div_update(divs[start-1],div_sizes[start-1],"green");//Color update
-    }
+    mergeSortHelper(low, mid);  // Left half
+    mergeSortHelper(mid + 1, high); // Right half
+    mergeHelper(low, mid, high);  // Merge sorted halves
 }
 
-function merge_partition(start,end)
-{
-    if(start < end)
-    {
-        var mid=Math.floor((start + end) / 2);
-        div_update(divs[mid],div_sizes[mid],"yellow");//Color update
+function mergeHelper(low, mid, high) {
+    let temp = []; // Temporary array
+    let left = low;  // Starting index of left half
+    let right = mid + 1; // Starting index of right half
 
-        merge_partition(start,mid);
-        merge_partition(mid+1,end);
+    // Storing elements in the temporary array in a sorted manner
+    while (left <= mid && right <= high) {
+        if (div_sizes[left] <= div_sizes[right]) {
+            temp.push(div_sizes[left]);
+            div_update(divs[left], div_sizes[left], "red"); // Highlight merging
+            left++;
+        } else {
+            temp.push(div_sizes[right]);
+            div_update(divs[right], div_sizes[right], "red"); // Highlight merging
+            right++;
+        }
+    }
 
-        merge_sort(start,mid,end);
+    // If elements on the left half are still left
+    while (left <= mid) {
+        temp.push(div_sizes[left]);
+        div_update(divs[left], div_sizes[left], "red");
+        left++;
+    }
+
+    // If elements on the right half are still left
+    while (right <= high) {
+        temp.push(div_sizes[right]);
+        div_update(divs[right], div_sizes[right], "red");
+        right++;
+    }
+
+    // Transferring all elements from temp back to div_sizes
+    for (let i = low; i <= high; i++) {
+        div_sizes[i] = temp[i - low];
+        div_update(divs[i], div_sizes[i], "green"); // Mark as sorted
     }
 }
-
